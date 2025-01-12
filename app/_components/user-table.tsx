@@ -44,7 +44,7 @@ const UserTable = ({ users }: UserTableProps) => {
       </div>
 
       {/* Delete Selected Button */}
-      <div className='flex justify-between h-10'>
+      <div className='flex justify-between px-4 h-10'>
         <div>
           {selectedUsers.length > 0 && (
             <Button
