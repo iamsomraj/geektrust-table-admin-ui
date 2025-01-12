@@ -25,6 +25,7 @@ const useUserTable = (usersData: UserType[]) => {
 
   const handleDeleteSelected = () => {
     setUsers((prevUsers) => prevUsers.filter((user) => !selectedUsers.includes(user)));
+    setSelectedUsers([]);
   };
 
   return {
