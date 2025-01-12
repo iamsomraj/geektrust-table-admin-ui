@@ -16,16 +16,20 @@ const UserTable = ({ users }: UserTableProps) => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  useEffect(() => {
-    setTotalPages(Math.ceil(users.length / 10));
-  }, [users]);
-
   const filteredUsers = useMemo(() => {
-    const currentPageUsers = users.slice((page - 1) * 10, page * 10);
-    return currentPageUsers.filter((user) => {
+    return users.filter((user) => {
       return user.name.toLowerCase().includes(search.toLowerCase()) || user.email.toLowerCase().includes(search.toLowerCase()) || user.role.toLowerCase().includes(search.toLowerCase());
     });
-  }, [users, search, page]);
+  }, [users, search]);
+
+  const paginatedUsers = useMemo(() => {
+    return filteredUsers.slice((page - 1) * 10, page * 10);
+  }, [filteredUsers, page]);
+
+  useEffect(() => {
+    setTotalPages(Math.ceil(filteredUsers.length / 10));
+    setPage(1);
+  }, [filteredUsers]);
 
   return (
     <div className='flex flex-col gap-6'>
@@ -38,13 +42,13 @@ const UserTable = ({ users }: UserTableProps) => {
         />
       </div>
 
-      {/* Delete Selected Button If Selected Has Values */}
+      {/* Delete Selected Button */}
       <div className='flex justify-center h-10'>
         {selectedUsers.length > 0 && (
           <Button
             variant='secondary'
             onClick={() => {
-              console.log('Delete Selected');
+              console.log('Delete Selected', selectedUsers);
             }}
           >
             Delete Selected
@@ -54,7 +58,7 @@ const UserTable = ({ users }: UserTableProps) => {
 
       {/* Table */}
       <Table<UserType>
-        data={filteredUsers}
+        data={paginatedUsers}
         columns={[
           { key: 'name', label: 'Name', render: (user) => user.name },
           { key: 'email', label: 'Email', render: (user) => user.email },
@@ -70,18 +74,21 @@ const UserTable = ({ users }: UserTableProps) => {
       <div className='flex gap-2 flex-wrap justify-center'>
         <Button
           className='first-page'
+          disabled={page === 1}
           onClick={() => setPage(1)}
         >
           First
         </Button>
         <Button
           className='previous-page'
-          onClick={() => setPage(page - 1 > 0 ? page - 1 : 1)}
+          disabled={page === 1}
+          onClick={() => setPage(page > 1 ? page - 1 : 1)}
         >
           Previous
         </Button>
         {[...Array(totalPages)].map((_, index) => (
           <Button
+            variant={index + 1 === page ? 'secondary' : 'primary'}
             key={index}
             onClick={() => setPage(index + 1)}
           >
@@ -90,12 +97,14 @@ const UserTable = ({ users }: UserTableProps) => {
         ))}
         <Button
           className='next-page'
-          onClick={() => setPage(page + 1 < totalPages ? page + 1 : totalPages)}
+          disabled={page === totalPages}
+          onClick={() => setPage(page < totalPages ? page + 1 : totalPages)}
         >
           Next
         </Button>
         <Button
           className='last-page'
+          disabled={page === totalPages}
           onClick={() => setPage(totalPages)}
         >
           Last
