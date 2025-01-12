@@ -15,32 +15,23 @@ type TableProps<T> = {
   areEqual?: (a: T, b: T) => boolean;
 };
 
-function Table<T>({ selected, columns, data, addCheckbox, onSelect, areEqual }: TableProps<T>) {
+function Table<T>({ selected = [], columns, data, addCheckbox, onSelect, areEqual }: TableProps<T>) {
+  const isSelected = (row: T) => selected.some((s) => (areEqual ? areEqual(row, s) : row === s));
+
   const areAllSelected = useMemo(() => {
-    if (!selected || !data) return false;
-
-    if (selected.length === 0) return false;
-
-    const areAllSelected = data.every((d) => selected.some((s) => (areEqual ? areEqual(d, s) : d === s)));
-
-    return areAllSelected;
-  }, [selected, data, areEqual]);
+    if (data.length === 0) return false;
+    return data.every((row) => isSelected(row));
+  }, [data, isSelected]);
 
   const handleSelectAll = () => {
     if (!onSelect) return;
-
-    if (areAllSelected) {
-      onSelect([]);
-      return;
-    }
-
-    onSelect(data);
+    onSelect(areAllSelected ? [] : data);
   };
 
-  const handleSelect = (selected: T) => {
+  const handleToggleRow = (row: T) => {
     if (!onSelect) return;
-
-    onSelect([selected]);
+    const newSelected = isSelected(row) ? selected.filter((s) => (areEqual ? !areEqual(s, row) : s !== row)) : [...selected, row];
+    onSelect(newSelected);
   };
 
   return (
@@ -50,15 +41,15 @@ function Table<T>({ selected, columns, data, addCheckbox, onSelect, areEqual }: 
           {addCheckbox && (
             <th>
               <input
-                value={areAllSelected ? 'on' : 'off'}
                 type='checkbox'
-                onChange={() => handleSelectAll()}
+                checked={areAllSelected}
+                onChange={handleSelectAll}
               />
               <span>Select All</span>
             </th>
           )}
-          {columns.map((column, index) => (
-            <th key={index}>{column.label}</th>
+          {columns.map((column) => (
+            <th key={column.key}>{column.label}</th>
           ))}
         </tr>
       </thead>
@@ -68,14 +59,14 @@ function Table<T>({ selected, columns, data, addCheckbox, onSelect, areEqual }: 
             {addCheckbox && (
               <td>
                 <input
-                  value={selected?.some((s) => (areEqual ? areEqual(row, s) : row === s)) ? 'on' : 'off'}
                   type='checkbox'
-                  onChange={() => handleSelect(row)}
+                  checked={isSelected(row)}
+                  onChange={() => handleToggleRow(row)}
                 />
               </td>
             )}
-            {columns.map((column, columnIndex) => (
-              <td key={columnIndex}>{column.render(row)}</td>
+            {columns.map((column) => (
+              <td key={column.key}>{column.render(row)}</td>
             ))}
           </tr>
         ))}
