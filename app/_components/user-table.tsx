@@ -1,0 +1,107 @@
+'use client';
+
+import Table from '@/components/table';
+import { UserType } from '@/types';
+import { useEffect, useMemo, useState } from 'react';
+
+interface UserTableProps {
+  users: UserType[];
+}
+
+const UserTable = ({ users }: UserTableProps) => {
+  const [selectedUsers, setSelectedUsers] = useState<UserType[]>([]);
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  useEffect(() => {
+    setTotalPages(Math.ceil(users.length / 10));
+  }, [users]);
+
+  const filteredUsers = useMemo(() => {
+    const currentPageUsers = users.slice((page - 1) * 10, page * 10);
+    return currentPageUsers.filter((user) => {
+      return user.name.toLowerCase().includes(search.toLowerCase()) || user.email.toLowerCase().includes(search.toLowerCase()) || user.role.toLowerCase().includes(search.toLowerCase());
+    });
+  }, [users, search, page]);
+
+  return (
+    <div className='flex flex-col gap-6'>
+      {/* Search */}
+      <input
+        type='text'
+        placeholder='Search'
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+
+      {/* Delete Selected Button If Selected Has Values */}
+      {selectedUsers.length > 0 && (
+        <button
+          onClick={() => {
+            console.log('Delete Selected');
+          }}
+        >
+          Delete Selected
+        </button>
+      )}
+
+      <div>{JSON.stringify(selectedUsers)}</div>
+
+      {/* Table */}
+      <Table<UserType>
+        data={filteredUsers}
+        columns={[
+          { key: 'name', label: 'Name', render: (user) => user.name },
+          { key: 'email', label: 'Email', render: (user) => user.email },
+          { key: 'role', label: 'Role', render: (user) => user.role },
+        ]}
+        selected={selectedUsers}
+        addCheckbox
+        onSelect={(users) => {
+          const uniqueUsers = users.filter((user) => !selectedUsers.some((selectedUser) => selectedUser.id === user.id));
+          setSelectedUsers([...selectedUsers, ...uniqueUsers]);
+        }}
+        areEqual={(a, b) => a.id === b.id}
+      />
+
+      {/* Pagination */}
+      <div>
+        <button
+          className='first-page'
+          onClick={() => setPage(1)}
+        >
+          First
+        </button>
+        <button
+          className='previous-page'
+          onClick={() => setPage(page - 1 > 0 ? page - 1 : 1)}
+        >
+          Previous
+        </button>
+        {[...Array(totalPages)].map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setPage(index + 1)}
+          >
+            {index + 1}
+          </button>
+        ))}
+        <button
+          className='next-page'
+          onClick={() => setPage(page + 1 < totalPages ? page + 1 : totalPages)}
+        >
+          Next
+        </button>
+        <button
+          className='last-page'
+          onClick={() => setPage(totalPages)}
+        >
+          Last
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default UserTable;
