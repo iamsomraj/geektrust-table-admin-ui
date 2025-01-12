@@ -64,7 +64,7 @@ const UserTable = ({ usersData }: UserTableProps) => {
   const { selectedUsers, setSelectedUsers, search, setSearch, page, setPage, totalPages, filteredUsers, paginatedUsers, handleDeleteSelected, handleSave, handleDelete } = useUserTable(usersData);
 
   return (
-    <div className='flex flex-col gap-2 mx-auto container mt-16'>
+    <div className='flex flex-col gap-2 mx-auto container my-16'>
       {/* Search */}
       <div className='flex justify-center px-4'>
         <Input
