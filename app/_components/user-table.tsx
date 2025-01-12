@@ -58,11 +58,8 @@ const UserTable = ({ users }: UserTableProps) => {
         ]}
         selected={selectedUsers}
         addCheckbox
-        onSelect={(users) => {
-          const uniqueUsers = users.filter((user) => !selectedUsers.some((selectedUser) => selectedUser.id === user.id));
-          setSelectedUsers([...selectedUsers, ...uniqueUsers]);
-        }}
-        areEqual={(a, b) => a.id === b.id}
+        onSelect={setSelectedUsers}
+        areEqual={(a, b) => Number(a.id) === Number(b.id)}
       />
 
       {/* Pagination */}
