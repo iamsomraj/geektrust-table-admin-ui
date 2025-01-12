@@ -1,5 +1,5 @@
-import Input from '@/components/input';
 import Button from '@/components/button';
+import Input from '@/components/input';
 import { useCallback, useMemo, useState } from 'react';
 
 type Column<T> = {
@@ -71,16 +71,17 @@ function Table<T>({ selected = [], columns, data, addCheckbox, addActions, onSel
   };
 
   return (
-    <table>
-      <thead>
+    <table className='w-full border-collapse border border-gray-200 text-sm'>
+      <thead className='bg-gray-100'>
         <tr>
           {addCheckbox && (
-            <th>
+            <th className='border border-gray-200 p-2 text-left flex items-center'>
               <input
                 id='select-all'
                 type='checkbox'
                 checked={areAllSelected}
                 onChange={handleSelectAll}
+                className='h-4 w-4'
               />
               <label
                 htmlFor='select-all'
@@ -91,55 +92,70 @@ function Table<T>({ selected = [], columns, data, addCheckbox, addActions, onSel
             </th>
           )}
           {columns.map((column) => (
-            <th key={column.key}>{column.label}</th>
+            <th
+              key={column.key}
+              className='border border-gray-200 p-2 text-left'
+            >
+              {column.label}
+            </th>
           ))}
-          {addActions && <th>Actions</th>}
+          {addActions && <th className='border border-gray-200 p-2 text-left'>Actions</th>}
         </tr>
       </thead>
       <tbody>
-        {data.map((row, rowIndex) => (
-          <tr key={rowIndex}>
-            {addCheckbox && (
-              <td className='text-center'>
-                <input
-                  type='checkbox'
-                  checked={isSelected(row)}
-                  onChange={() => handleToggleRow(row)}
-                />
-              </td>
-            )}
-            {columns.map((column) => (
-              <td
-                key={column.key}
-                className='text-center'
-              >
-                {editingRow === row ? (
-                  <Input
-                    value={(editedData[column.key as keyof T] as string) || ''}
-                    onChange={(e) => handleInputChange(column.key, e.target.value)}
+        {data.map((row, rowIndex) => {
+          const isRowSelected = isSelected(row);
+          const isEditing = editingRow === row;
+
+          return (
+            <tr
+              key={rowIndex}
+              className={`border border-gray-200 ${isRowSelected ? 'bg-blue-50' : 'hover:bg-gray-50'}`}
+            >
+              {addCheckbox && (
+                <td className='border border-gray-200 p-2 text-center'>
+                  <input
+                    type='checkbox'
+                    checked={isRowSelected}
+                    onChange={() => handleToggleRow(row)}
+                    className='h-4 w-4'
                   />
-                ) : (
-                  column.render(row)
-                )}
-              </td>
-            ))}
-            {addActions && (
-              <td className='flex gap-2 justify-center'>
-                {editingRow === row ? (
-                  <>
-                    <Button onClick={handleSave}>Save</Button>
-                    <Button onClick={handleCancel}>Cancel</Button>
-                  </>
-                ) : (
-                  <>
-                    <Button onClick={() => handleEdit(row)}>Edit</Button>
-                    <Button onClick={() => handleDelete(row)}>Delete</Button>
-                  </>
-                )}
-              </td>
-            )}
-          </tr>
-        ))}
+                </td>
+              )}
+              {columns.map((column) => (
+                <td
+                  key={column.key}
+                  className={`border border-gray-200 p-2 ${isEditing ? 'bg-yellow-50' : ''}`}
+                >
+                  {isEditing ? (
+                    <Input
+                      value={(editedData[column.key as keyof T] as string) || ''}
+                      onChange={(e) => handleInputChange(column.key, e.target.value)}
+                      className='w-full'
+                    />
+                  ) : (
+                    column.render(row)
+                  )}
+                </td>
+              ))}
+              {addActions && (
+                <td className='flex gap-2 justify-center p-2'>
+                  {isEditing ? (
+                    <>
+                      <Button onClick={handleSave}>Save</Button>
+                      <Button onClick={handleCancel}>Cancel</Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button onClick={() => handleEdit(row)}>Edit</Button>
+                      <Button onClick={() => handleDelete(row)}>Delete</Button>
+                    </>
+                  )}
+                </td>
+              )}
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );

@@ -6,7 +6,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const Input = ({ label, prepend, append, id, ...props }: InputProps) => {
   return (
-    <div className='flex flex-col w-full'>
+    <div className='flex flex-col w-full bg-white'>
       {label && (
         <label
           htmlFor={id}
