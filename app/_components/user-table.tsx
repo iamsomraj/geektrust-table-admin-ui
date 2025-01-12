@@ -32,28 +32,34 @@ const UserTable = ({ users }: UserTableProps) => {
   }, [filteredUsers]);
 
   return (
-    <div className='flex flex-col gap-6'>
+    <div className='flex flex-col gap-2 mx-auto container mt-16'>
       {/* Search */}
       <div className='flex justify-center px-4'>
         <Input
           label='Search'
+          placeholder='Search by name, email, or role'
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
 
       {/* Delete Selected Button */}
-      <div className='flex justify-center h-10'>
-        {selectedUsers.length > 0 && (
-          <Button
-            variant='secondary'
-            onClick={() => {
-              console.log('Delete Selected', selectedUsers);
-            }}
-          >
-            Delete Selected
-          </Button>
-        )}
+      <div className='flex justify-between h-10'>
+        <div>
+          {selectedUsers.length > 0 && (
+            <Button
+              onClick={() => {
+                console.log('Delete Selected', selectedUsers);
+              }}
+            >
+              Delete Selected
+            </Button>
+          )}
+        </div>
+
+        <span>
+          Showing {Math.min((page - 1) * 10 + 1, filteredUsers.length)} to {Math.min(page * 10, filteredUsers.length)} of {filteredUsers.length} entries
+        </span>
       </div>
 
       {/* Table */}
