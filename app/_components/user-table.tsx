@@ -61,7 +61,7 @@ interface UserTableProps {
 }
 
 const UserTable = ({ usersData }: UserTableProps) => {
-  const { selectedUsers, setSelectedUsers, search, setSearch, page, setPage, totalPages, filteredUsers, paginatedUsers, handleDeleteSelected } = useUserTable(usersData);
+  const { selectedUsers, setSelectedUsers, search, setSearch, page, setPage, totalPages, filteredUsers, paginatedUsers, handleDeleteSelected, handleSave, handleDelete } = useUserTable(usersData);
 
   return (
     <div className='flex flex-col gap-2 mx-auto container mt-16'>
@@ -92,10 +92,13 @@ const UserTable = ({ usersData }: UserTableProps) => {
           { key: 'email', label: 'Email', render: (user) => user.email },
           { key: 'role', label: 'Role', render: (user) => user.role },
         ]}
+        areEqual={(a, b) => Number(a.id) === Number(b.id)}
         selected={selectedUsers}
         addCheckbox
+        addActions
         onSelect={setSelectedUsers}
-        areEqual={(a, b) => Number(a.id) === Number(b.id)}
+        onSave={handleSave}
+        onDelete={handleDelete}
       />
 
       {/* Pagination */}

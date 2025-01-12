@@ -1,5 +1,5 @@
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
+  label?: string;
   prepend?: React.ReactNode;
   append?: React.ReactNode;
 }
@@ -7,12 +7,14 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const Input = ({ label, prepend, append, id, ...props }: InputProps) => {
   return (
     <div className='flex flex-col w-full'>
-      <label
-        htmlFor={id}
-        className='mb-1 text-sm font-medium text-gray-700'
-      >
-        {label}
-      </label>
+      {label && (
+        <label
+          htmlFor={id}
+          className='mb-1 text-sm font-medium text-gray-700'
+        >
+          {label}
+        </label>
+      )}
       <div className='flex border px-2 rounded-md'>
         {prepend && <div className='flex items-center px-3 bg-gray-100 rounded-l-md'>{prepend}</div>}
         <input

@@ -28,6 +28,14 @@ const useUserTable = (usersData: UserType[]) => {
     setSelectedUsers([]);
   };
 
+  const handleSave = (updatedRow: UserType) => {
+    setUsers((prevUsers) => prevUsers.map((user) => (user.id === updatedRow.id ? updatedRow : user)));
+  };
+
+  const handleDelete = (row: UserType) => {
+    setUsers((prevUsers) => prevUsers.filter((user) => user.id !== row.id));
+  };
+
   return {
     users,
     setUsers,
@@ -42,6 +50,8 @@ const useUserTable = (usersData: UserType[]) => {
     filteredUsers,
     paginatedUsers,
     handleDeleteSelected,
+    handleSave,
+    handleDelete,
   };
 };
 
