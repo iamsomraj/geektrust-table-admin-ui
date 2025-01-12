@@ -1,6 +1,8 @@
 'use client';
 
 import Table from '@/components/table';
+import Button from '@/components/button';
+import Input from '@/components/input';
 import { UserType } from '@/types';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -28,25 +30,27 @@ const UserTable = ({ users }: UserTableProps) => {
   return (
     <div className='flex flex-col gap-6'>
       {/* Search */}
-      <input
-        type='text'
-        placeholder='Search'
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      <div className='flex justify-center px-4'>
+        <Input
+          label='Search'
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
       {/* Delete Selected Button If Selected Has Values */}
-      {selectedUsers.length > 0 && (
-        <button
-          onClick={() => {
-            console.log('Delete Selected');
-          }}
-        >
-          Delete Selected
-        </button>
-      )}
-
-      <div>{JSON.stringify(selectedUsers)}</div>
+      <div className='flex justify-center h-10'>
+        {selectedUsers.length > 0 && (
+          <Button
+            variant='secondary'
+            onClick={() => {
+              console.log('Delete Selected');
+            }}
+          >
+            Delete Selected
+          </Button>
+        )}
+      </div>
 
       {/* Table */}
       <Table<UserType>
@@ -63,39 +67,39 @@ const UserTable = ({ users }: UserTableProps) => {
       />
 
       {/* Pagination */}
-      <div>
-        <button
+      <div className='flex gap-2 flex-wrap justify-center'>
+        <Button
           className='first-page'
           onClick={() => setPage(1)}
         >
           First
-        </button>
-        <button
+        </Button>
+        <Button
           className='previous-page'
           onClick={() => setPage(page - 1 > 0 ? page - 1 : 1)}
         >
           Previous
-        </button>
+        </Button>
         {[...Array(totalPages)].map((_, index) => (
-          <button
+          <Button
             key={index}
             onClick={() => setPage(index + 1)}
           >
             {index + 1}
-          </button>
+          </Button>
         ))}
-        <button
+        <Button
           className='next-page'
           onClick={() => setPage(page + 1 < totalPages ? page + 1 : totalPages)}
         >
           Next
-        </button>
-        <button
+        </Button>
+        <Button
           className='last-page'
           onClick={() => setPage(totalPages)}
         >
           Last
-        </button>
+        </Button>
       </div>
     </div>
   );

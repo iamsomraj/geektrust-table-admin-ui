@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 type Column<T> = {
   key: string;
@@ -16,7 +16,7 @@ type TableProps<T> = {
 };
 
 function Table<T>({ selected = [], columns, data, addCheckbox, onSelect, areEqual }: TableProps<T>) {
-  const isSelected = (row: T) => selected.some((s) => (areEqual ? areEqual(row, s) : row === s));
+  const isSelected = useCallback((row: T) => selected.some((s) => (areEqual ? areEqual(row, s) : row === s)), [selected, areEqual]);
 
   const areAllSelected = useMemo(() => {
     if (data.length === 0) return false;
@@ -45,7 +45,7 @@ function Table<T>({ selected = [], columns, data, addCheckbox, onSelect, areEqua
                 checked={areAllSelected}
                 onChange={handleSelectAll}
               />
-              <span>Select All</span>
+              <span className='ml-2'>Select All</span>
             </th>
           )}
           {columns.map((column) => (
@@ -57,7 +57,7 @@ function Table<T>({ selected = [], columns, data, addCheckbox, onSelect, areEqua
         {data.map((row, rowIndex) => (
           <tr key={rowIndex}>
             {addCheckbox && (
-              <td>
+              <td className='text-center'>
                 <input
                   type='checkbox'
                   checked={isSelected(row)}
@@ -66,7 +66,12 @@ function Table<T>({ selected = [], columns, data, addCheckbox, onSelect, areEqua
               </td>
             )}
             {columns.map((column) => (
-              <td key={column.key}>{column.render(row)}</td>
+              <td
+                key={column.key}
+                className='text-center'
+              >
+                {column.render(row)}
+              </td>
             ))}
           </tr>
         ))}
