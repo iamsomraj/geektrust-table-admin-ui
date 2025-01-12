@@ -75,7 +75,7 @@ function Table<T>({ selected = [], columns, data, addCheckbox, addActions, onSel
       <thead className='bg-gray-100'>
         <tr>
           {addCheckbox && (
-            <th className='border border-gray-200 p-2 text-left flex items-center'>
+            <th className='p-2 text-center flex items-center justify-center'>
               <input
                 id='select-all'
                 type='checkbox'
@@ -139,7 +139,7 @@ function Table<T>({ selected = [], columns, data, addCheckbox, addActions, onSel
                 </td>
               ))}
               {addActions && (
-                <td className='flex gap-2 justify-center p-2'>
+                <td className='flex gap-2 justify-start p-2'>
                   {isEditing ? (
                     <>
                       <Button onClick={handleSave}>Save</Button>
