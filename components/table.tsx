@@ -41,11 +41,17 @@ function Table<T>({ selected = [], columns, data, addCheckbox, onSelect, areEqua
           {addCheckbox && (
             <th>
               <input
+                id='select-all'
                 type='checkbox'
                 checked={areAllSelected}
                 onChange={handleSelectAll}
               />
-              <span className='ml-2'>Select All</span>
+              <label
+                htmlFor='select-all'
+                className='ml-2'
+              >
+                Select All
+              </label>
             </th>
           )}
           {columns.map((column) => (
