@@ -85,21 +85,23 @@ const UserTable = ({ usersData }: UserTableProps) => {
       </div>
 
       {/* Table */}
-      <Table<UserType>
-        data={paginatedUsers}
-        columns={[
-          { key: 'name', label: 'Name', render: (user) => user.name },
-          { key: 'email', label: 'Email', render: (user) => user.email },
-          { key: 'role', label: 'Role', render: (user) => user.role },
-        ]}
-        areEqual={(a, b) => Number(a.id) === Number(b.id)}
-        selected={selectedUsers}
-        addCheckbox
-        addActions
-        onSelect={setSelectedUsers}
-        onSave={handleSave}
-        onDelete={handleDelete}
-      />
+      <div className='px-4'>
+        <Table<UserType>
+          data={paginatedUsers}
+          columns={[
+            { key: 'name', label: 'Name', render: (user) => user.name },
+            { key: 'email', label: 'Email', render: (user) => user.email },
+            { key: 'role', label: 'Role', render: (user) => user.role },
+          ]}
+          areEqual={(a, b) => Number(a.id) === Number(b.id)}
+          selected={selectedUsers}
+          addCheckbox
+          addActions
+          onSelect={setSelectedUsers}
+          onSave={handleSave}
+          onDelete={handleDelete}
+        />
+      </div>
 
       {/* Pagination */}
       <Pagination
