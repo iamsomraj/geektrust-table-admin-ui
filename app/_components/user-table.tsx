@@ -6,6 +6,51 @@ import Table from '@/components/table';
 import useUserTable from '@/hooks/use-user-table';
 import { UserType } from '@/types';
 
+interface UserSearchProps {
+  setSearch: (search: string) => void;
+}
+
+function UserSearch({ setSearch }: UserSearchProps) {
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const search = formData.get('search') as string;
+    setSearch(search);
+  };
+
+  return (
+    <form
+      className='flex justify-center gap-2 px-4'
+      onSubmit={handleSearch}
+    >
+      <Input
+        prepend={
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            fill='none'
+            viewBox='0 0 24 24'
+            strokeWidth='1.5'
+            stroke='currentColor'
+            className='size-6 search-icon'
+          >
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
+            />
+          </svg>
+        }
+        label='Search'
+        placeholder='Search by name, email, or role'
+        name='search'
+      />
+      <div className='flex items-end'>
+        <Button type='submit'>Search</Button>
+      </div>
+    </form>
+  );
+}
+
 interface PaginationProps {
   page: number;
   totalPages: number;
@@ -61,35 +106,12 @@ interface UserTableProps {
 }
 
 const UserTable = ({ usersData }: UserTableProps) => {
-  const { selectedUsers, setSelectedUsers, search, setSearch, page, setPage, totalPages, filteredUsers, paginatedUsers, handleDeleteSelected, handleSave, handleDelete } = useUserTable(usersData);
+  const { selectedUsers, setSelectedUsers, setSearch, page, setPage, totalPages, filteredUsers, paginatedUsers, handleDeleteSelected, handleSave, handleDelete } = useUserTable(usersData);
 
   return (
     <div className='flex flex-col gap-2 mx-auto container my-16'>
       {/* Search */}
-      <div className='flex justify-center px-4'>
-        <Input
-          prepend={
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth='1.5'
-              stroke='currentColor'
-              className='size-6 search-icon'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
-              />
-            </svg>
-          }
-          label='Search'
-          placeholder='Search by name, email, or role'
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+      <UserSearch setSearch={setSearch} />
 
       {/* Delete Selected Button */}
       <div className='flex justify-between px-4 h-10'>
