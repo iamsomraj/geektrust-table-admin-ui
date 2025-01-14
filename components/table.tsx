@@ -71,108 +71,110 @@ function Table<T>({ selected = [], columns, data, addCheckbox, addActions, onSel
   };
 
   return (
-    <table className='w-full border-collapse border border-gray-200 text-sm'>
-      <thead className='bg-gray-100'>
-        <tr>
-          {addCheckbox && (
-            <th className='p-2 text-center flex items-center justify-center'>
-              <input
-                id='select-all'
-                type='checkbox'
-                checked={areAllSelected}
-                onChange={handleSelectAll}
-                className='h-4 w-4'
-              />
-              <label
-                htmlFor='select-all'
-                className='ml-2'
-              >
-                Select All
-              </label>
-            </th>
-          )}
-          {columns.map((column) => (
-            <th
-              key={column.key}
-              className='border border-gray-200 p-2 text-left'
-            >
-              {column.label}
-            </th>
-          ))}
-          {addActions && <th className='border border-gray-200 p-2 text-left'>Actions</th>}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((row, rowIndex) => {
-          const isRowSelected = isSelected(row);
-          const isEditing = editingRow === row;
-
-          return (
-            <tr
-              key={rowIndex}
-              className={`border border-gray-200 ${isRowSelected ? 'bg-blue-50' : 'hover:bg-gray-50'}`}
-            >
-              {addCheckbox && (
-                <td className='border border-gray-200 p-2 text-center'>
-                  <input
-                    type='checkbox'
-                    checked={isRowSelected}
-                    onChange={() => handleToggleRow(row)}
-                    className='h-4 w-4'
-                  />
-                </td>
-              )}
-              {columns.map((column) => (
-                <td
-                  key={column.key}
-                  className={`border border-gray-200 p-2 ${isEditing ? 'bg-yellow-50' : ''}`}
+    <div className='overflow-x-auto'>
+      <table className='w-full border-collapse border border-gray-200 text-sm'>
+        <thead className='bg-gray-100'>
+          <tr>
+            {addCheckbox && (
+              <th className='p-2 text-center'>
+                <input
+                  id='select-all'
+                  type='checkbox'
+                  checked={areAllSelected}
+                  onChange={handleSelectAll}
+                  className='h-4 w-4'
+                />
+                <label
+                  htmlFor='select-all'
+                  className='sr-only'
                 >
-                  {isEditing ? (
-                    <Input
-                      value={(editedData[column.key as keyof T] as string) || ''}
-                      onChange={(e) => handleInputChange(column.key, e.target.value)}
-                      className='w-full'
+                  Select All
+                </label>
+              </th>
+            )}
+            {columns.map((column) => (
+              <th
+                key={column.key}
+                className='border border-gray-200 p-2 text-left text-xs md:text-sm'
+              >
+                {column.label}
+              </th>
+            ))}
+            {addActions && <th className='border border-gray-200 p-2 text-left'>Actions</th>}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row, rowIndex) => {
+            const isRowSelected = isSelected(row);
+            const isEditing = editingRow === row;
+
+            return (
+              <tr
+                key={rowIndex}
+                className={`border border-gray-200 ${isRowSelected ? 'bg-blue-50' : 'hover:bg-gray-50'}`}
+              >
+                {addCheckbox && (
+                  <td className='border border-gray-200 p-2 text-center'>
+                    <input
+                      type='checkbox'
+                      checked={isRowSelected}
+                      onChange={() => handleToggleRow(row)}
+                      className='h-4 w-4'
                     />
-                  ) : (
-                    column.render(row)
-                  )}
-                </td>
-              ))}
-              {addActions && (
-                <td className='flex gap-2 justify-start p-2'>
-                  {isEditing ? (
-                    <>
-                      <Button
-                        onClick={handleSave}
-                        className='save'
-                      >
-                        Save
-                      </Button>
-                      <Button onClick={handleCancel}>Cancel</Button>
-                    </>
-                  ) : (
-                    <>
-                      <Button
-                        onClick={() => handleEdit(row)}
-                        className='edit'
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        onClick={() => handleDelete(row)}
-                        className='delete'
-                      >
-                        Delete
-                      </Button>
-                    </>
-                  )}
-                </td>
-              )}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+                  </td>
+                )}
+                {columns.map((column) => (
+                  <td
+                    key={column.key}
+                    className={`border border-gray-200 p-2 text-xs md:text-sm ${isEditing ? 'bg-yellow-50' : ''}`}
+                  >
+                    {isEditing ? (
+                      <Input
+                        value={(editedData[column.key as keyof T] as string) || ''}
+                        onChange={(e) => handleInputChange(column.key, e.target.value)}
+                        className='w-full'
+                      />
+                    ) : (
+                      column.render(row)
+                    )}
+                  </td>
+                ))}
+                {addActions && (
+                  <td className='flex gap-2 justify-start p-2 text-xs md:text-sm'>
+                    {isEditing ? (
+                      <>
+                        <Button
+                          onClick={handleSave}
+                          className='save'
+                        >
+                          Save
+                        </Button>
+                        <Button onClick={handleCancel}>Cancel</Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          onClick={() => handleEdit(row)}
+                          className='edit'
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          onClick={() => handleDelete(row)}
+                          className='delete'
+                        >
+                          Delete
+                        </Button>
+                      </>
+                    )}
+                  </td>
+                )}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
