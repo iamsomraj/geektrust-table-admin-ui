@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GeekTrust Admin UI Application - A User Management Interface
 
-## Getting Started
+This Next.js application provides an interface for admins to view, edit, delete, and manage users fetched from an API. It is designed with ease of use and functionality in mind, implementing features such as search, filtering, pagination, and in-place editing.
 
-First, run the development server:
+## Run Locally
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+To set up and run the application locally, follow these steps:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. **Open Terminal**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. **Clone the Repository**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   git clone https://github.com/iamsomraj/geektrust-table-admin-ui.git
+   ```
 
-## Learn More
+3. **Navigate to the Root Directory**
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   cd geektrust-table-admin-ui
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. **Install Dependencies**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   npm install
+   ```
 
-## Deploy on Vercel
+5. **Run the Application**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+   npm run dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   The application will be accessible at `http://localhost:3000`.
+
+## Features
+
+### 1. **User Management**
+
+- View a list of users with columns for `ID`, `Name`, `Email`, and `Role`.
+- Column titles are distinct and visually separated from the entries.
+
+### 2. **Search and Filter**
+
+- A search bar with placeholder text starting with "Search".
+- Supports filtering users by any property (`ID`, `Name`, `Email`, `Role`).
+
+### 3. **In-Place Editing and Deletion**
+
+- Edit user details directly in the table.
+- Delete individual rows or multiple selected rows.
+- Action buttons include:
+  - `Edit` (class: `edit`)
+  - `Delete` (class: `delete`)
+  - `Save` (class: `save`)
+
+### 4. **Pagination**
+
+- Displays 10 rows per page.
+- Pagination controls include:
+  - `First Page` (class: `first-page`)
+  - `Previous Page` (class: `previous-page`)
+  - `Next Page` (class: `next-page`)
+  - `Last Page` (class: `last-page`)
+- Pagination dynamically updates based on search/filtering results.
+
+### 5. **Row Selection**
+
+- Select individual rows by clicking checkboxes.
+- Delete all selected rows using the `Delete Selected` button.
+
+## Developer Notes
+
+1. **Data Fetching**
+
+   - User data is fetched from the API:
+     ```
+     https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json
+     ```
+
+2. **Sorting**
+
+   - Users are sorted by the `ID` field by default.
+
+3. **No Persistence**
+
+   - Edits and deletions occur in memory and are not persisted.
+
+## Show Your Support
+
+If you find this project useful, please give it a star! ⭐
+
+## License
+
+This project is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).

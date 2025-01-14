@@ -142,13 +142,28 @@ function Table<T>({ selected = [], columns, data, addCheckbox, addActions, onSel
                 <td className='flex gap-2 justify-start p-2'>
                   {isEditing ? (
                     <>
-                      <Button onClick={handleSave}>Save</Button>
+                      <Button
+                        onClick={handleSave}
+                        className='save'
+                      >
+                        Save
+                      </Button>
                       <Button onClick={handleCancel}>Cancel</Button>
                     </>
                   ) : (
                     <>
-                      <Button onClick={() => handleEdit(row)}>Edit</Button>
-                      <Button onClick={() => handleDelete(row)}>Delete</Button>
+                      <Button
+                        onClick={() => handleEdit(row)}
+                        className='edit'
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        onClick={() => handleDelete(row)}
+                        className='delete'
+                      >
+                        Delete
+                      </Button>
                     </>
                   )}
                 </td>
