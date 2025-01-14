@@ -18,6 +18,8 @@ const useUserTable = (usersData: UserType[]) => {
     return filteredUsers.slice((page - 1) * 10, page * 10);
   }, [filteredUsers, page]);
 
+  const hasUsers = users.length > 0;
+
   useEffect(() => {
     setTotalPages(Math.ceil(filteredUsers.length / 10));
     setPage(1);
@@ -41,6 +43,7 @@ const useUserTable = (usersData: UserType[]) => {
     setUsers,
     selectedUsers,
     setSelectedUsers,
+    hasUsers,
     search,
     setSearch,
     page,

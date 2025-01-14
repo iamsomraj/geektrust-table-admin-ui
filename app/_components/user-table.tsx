@@ -106,9 +106,9 @@ interface UserTableProps {
 }
 
 const UserTable = ({ usersData }: UserTableProps) => {
-  const { selectedUsers, setSelectedUsers, setSearch, page, setPage, totalPages, filteredUsers, paginatedUsers, handleDeleteSelected, handleSave, handleDelete } = useUserTable(usersData);
+  const { hasUsers, selectedUsers, setSelectedUsers, setSearch, page, setPage, totalPages, filteredUsers, paginatedUsers, handleDeleteSelected, handleSave, handleDelete } = useUserTable(usersData);
 
-  return (
+  return hasUsers ? (
     <div className='flex flex-col gap-2 mx-auto container my-16'>
       {/* Search */}
       <UserSearch setSearch={setSearch} />
@@ -147,6 +147,11 @@ const UserTable = ({ usersData }: UserTableProps) => {
         totalPages={totalPages}
         setPage={setPage}
       />
+    </div>
+  ) : (
+    <div className='flex justify-center items-center gap-6 flex-col h-96'>
+      <p className='text-xl'>All users have been deleted.</p>
+      <Button onClick={() => window.location.reload()}>Reload</Button>
     </div>
   );
 };
